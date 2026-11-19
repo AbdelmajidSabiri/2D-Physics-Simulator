@@ -1,8 +1,10 @@
+
 #include <SFML/Graphics.hpp>
+#include "Particle.h"
 
 int main()
 {
-    // Create the application window
+    // Create the window
     sf::RenderWindow window(
         sf::VideoMode({800, 600}),
         "2D Physics Simulator"
@@ -10,13 +12,26 @@ int main()
 
     window.setFramerateLimit(60);
 
-    // Create our first particle
-    sf::CircleShape particle(30.f);
+    // Create a particle
+    Particle particle({100.f, 300.f}, 1.f, 20.f);
 
-    particle.setFillColor(sf::Color::Green);
-    particle.setPosition({385.f, 285.f});
+    // Give it an initial velocity
+    particle.setVelocity({120.f, 0.f});
 
-    // Main application loop
+    // Create its visual representation
+    sf::CircleShape shape(particle.getRadius());
+
+    shape.setOrigin({
+        particle.getRadius(),
+        particle.getRadius()
+    });
+
+    shape.setFillColor(sf::Color::Green);
+
+    // Clock for calculating elapsed time
+    sf::Clock clock;
+
+    // Main loop
     while (window.isOpen())
     {
         // Handle events
@@ -28,13 +43,18 @@ int main()
             }
         }
 
-        // Clear the window
+        // Calculate delta time
+        float deltaTime = clock.restart().asSeconds();
+
+        // Update physics
+        particle.update(deltaTime);
+
+        // Update graphics position
+        shape.setPosition(particle.getPosition());
+
+        // Render
         window.clear(sf::Color(30, 30, 40));
-
-        // Draw our particle
-        window.draw(particle);
-
-        // Display everything
+        window.draw(shape);
         window.display();
     }
 

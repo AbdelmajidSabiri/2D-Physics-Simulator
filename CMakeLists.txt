@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.28)
 
 project(PhysicsSimulator VERSION 0.1.0 LANGUAGES CXX)
@@ -12,6 +11,12 @@ find_package(SFML 3 REQUIRED COMPONENTS Graphics)
 
 add_executable(physics_simulator
     src/main.cpp
+    src/Particle.cpp
+
+)
+
+target_include_directories(physics_simulator
+    PRIVATE include
 )
 
 target_link_libraries(physics_simulator
